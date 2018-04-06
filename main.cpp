@@ -1,4 +1,3 @@
-// C Program for counting sort
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
