@@ -6,7 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <time.h>//necessário p/ função time()
-#define RANGE 255
+
 
 using namespace std;
 
