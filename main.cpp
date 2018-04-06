@@ -26,8 +26,10 @@ void gera_aleatorio(int vetor[],int tam){
     }
 }
 
-void countSort(int a[],int n,int k){
+void countSort_estavel(int a[],int n,int k){
     int b[n],c[k+1],i;
+
+
     // inicializa o vetor auxiliar com 0
     for (i = 0 ; i < k + 1 ; i++)
         c[i] = 0;
@@ -44,6 +46,58 @@ void countSort(int a[],int n,int k){
    // Retorna os valores ordenados para o vetor
     for (i = 0; i < n; ++i)
         a[i] = b[i];
+}
+
+void countSort_instavel(int a[],int n,int k){
+    int b[n],c[k+1],i,j;
+
+    vector<int> d;
+    // inicializa o vetor auxiliar com 0
+    for (i = 0 ; i < k + 1 ; i++)
+        c[i] = 0;
+    // Armazena a contagem de cada caractere
+    for(i = 0; i < n ; ++i)
+        c[a[i]] = c[a[i]] + 1;
+
+    for (i = 0; i < k + 1; i++){
+        for (j = 0 ; j < c[i] ; i++)
+            d.push_back(i);
+    }
+   // Retorna os valores ordenados para o vetor
+    for (i = 0; i < n; ++i)
+        a[i] = d[i];
+}
+
+void countSort_estavel_radix(int a[],int n,int k, int carac){
+    int b[n],c[k+1],i;
+    // inicializa o vetor auxiliar com 0
+    for (i = 0 ; i < k + 1 ; i++)
+        c[i] = 0;
+    // Armazena a contagem de cada caractere
+    for(i = 0; i < n ; ++i)
+        c[ (a[i]/carac)%10 ] = c[ (a[i]/carac)%10 ] + 1;
+    // Ordena os indices do vetor auxiliar
+    for (i = 1; i < k + 1; ++i)
+        c[i] = c[i] + c[i-1];
+
+    for (i = 0; i < n; i++){
+        b[c[((a[i]/carac)%10)]-1] = a[i];
+        c[(a[i]/carac)%10]= c[(a[i]/carac)%10] - 1;
+    }
+   // Retorna os valores ordenados para o vetor
+    for (i = 0; i < n; ++i)
+        a[i] = b[i];
+}
+
+void radixsort(int a[], int n){
+    // Find the maximum number to know number of digits
+    int k = valor_max(a, n);
+
+    // Do counting sort for every digit. Note that instead
+    // of passing digit number, exp is passed. exp is 10^i
+    // where i is current digit number
+    for (int caract = 1; k/caract > 0; caract *= 10)
+        countSort_estavel_radix(a,n,k, caract);
 }
 
 // Function to sort arr[] of size n using bucket sort
@@ -83,7 +137,7 @@ int main(){
     for (int i=0; i<n; i++)
        cout << a[i] << " ";
 
-    countSort(a,n,k);
+    countSort_instavel(a,n,k);
 
     printf("\nO vetor ordenado pelo Counting Sort e:\n");
 
@@ -104,5 +158,19 @@ int main(){
     for (int i=0; i<n; i++)
        cout << arr[i] << " ";
 
+       int a2[n];
+       gera_aleatorio(a2,n);
+
+       cout <<"\nO vetor a ser ordenado pelo Radix Sort e:\n";
+
+    for (int i=0; i<n; i++)
+       cout << a2[i] << " ";
+
+       radixsort(a2,n);
+
+ cout <<"\nO vetor ordenado pelo Radix Sort e:\n";
+
+    for (int i=0; i<n; i++)
+       cout << a2[i] << " ";
     return 0;
 }
